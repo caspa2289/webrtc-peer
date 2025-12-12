@@ -2,9 +2,10 @@ let candidateDescription = null
 
 let dataChannel = null
 
+const gyroscope = new Gyroscope({ frequency: 60 })
+
 const handleMessage = (event) => {
     if (event.data) {
-        alert(event.data)
         navigator.vibrate([1000])
     }
 }
@@ -16,7 +17,19 @@ const init = async () => {
         if (!dataChannel) {
             dataChannel = event.channel
 
-            dataChannel.send('farts from peer')
+            gyroscope.addEventListener('reading', (e) => {
+                const buffer = new ArrayBuffer(
+                    3 * Float64Array.BYTES_PER_ELEMENT
+                )
+
+                const array = new Float64Array(buffer)
+                array[0] = gyroscope.x
+                array[1] = gyroscope.y
+                array[2] = gyroscope.z
+
+                dataChannel.send(buffer)
+            })
+            gyroscope.start()
 
             dataChannel.onmessage = handleMessage
         }
