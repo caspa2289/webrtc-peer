@@ -22,6 +22,20 @@ const init = async () => {
         }
     }
 
+    connection.onicecandidate = (event) => {
+        console.log(event.candidate)
+        if (event.candidate && !candidateDescription) {
+            connection.addIceCandidate(event.candidate)
+            candidateDescription = event.candidate.candidate
+
+            navigator.clipboard.writeText(
+                JSON.stringify(connection.localDescription) +
+                    'POOPY_BALLS' +
+                    candidateDescription
+            )
+        }
+    }
+
     return connection
 }
 
@@ -33,14 +47,11 @@ const handleInput = async (hostData, connection) => {
     await connection.setRemoteDescription(desc)
     await connection.setLocalDescription(await connection.createAnswer())
 
-    connection.addIceCandidate({
+    await connection.addIceCandidate({
         candidate,
         sdpMLineIndex: 0,
         sdpMid: '0',
     })
-
-    alert('copied data to clipboard')
-    navigator.clipboard.writeText(JSON.stringify(connection.localDescription))
 }
 
 init().then((connection) => {
