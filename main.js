@@ -2,8 +2,6 @@ let candidateDescription = null
 
 let dataChannel = null
 
-const gyroscope = new Gyroscope({ frequency: 60 })
-
 const handleMessage = (event) => {
     if (event.data) {
         navigator.vibrate([1000])
@@ -17,19 +15,23 @@ const init = async () => {
         if (!dataChannel) {
             dataChannel = event.channel
 
-            gyroscope.addEventListener('reading', (e) => {
+            const sensor = new AbsoluteOrientationSensor({
+                frequency: 60,
+                referenceFrame: 'device',
+            })
+
+            sensor.addEventListener('reading', () => {
                 const buffer = new ArrayBuffer(
-                    3 * Float64Array.BYTES_PER_ELEMENT
+                    16 * Float64Array.BYTES_PER_ELEMENT
                 )
 
                 const array = new Float64Array(buffer)
-                array[0] = gyroscope.x
-                array[1] = gyroscope.y
-                array[2] = gyroscope.z
+                sensor.populateMatrix(array)
 
                 dataChannel.send(buffer)
             })
-            gyroscope.start()
+
+            sensor.start()
 
             dataChannel.onmessage = handleMessage
         }
