@@ -15,7 +15,7 @@ const init = async () => {
         if (!dataChannel) {
             dataChannel = event.channel
 
-            const sensor = new RelativeOrientationSensor({
+            const sensor = new AbsoluteOrientationSensor({
                 frequency: 60,
                 referenceFrame: 'screen',
             })
