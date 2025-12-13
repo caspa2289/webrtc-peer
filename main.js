@@ -22,11 +22,15 @@ const init = async () => {
 
             sensor.addEventListener('reading', () => {
                 const buffer = new ArrayBuffer(
-                    16 * Float32Array.BYTES_PER_ELEMENT
+                    4 * Float32Array.BYTES_PER_ELEMENT
                 )
 
                 const array = new Float32Array(buffer)
-                sensor.populateMatrix(array)
+
+                array[0] = sensor.quaternion[0]
+                array[1] = sensor.quaternion[1]
+                array[2] = sensor.quaternion[2]
+                array[3] = sensor.quaternion[3]
 
                 dataChannel.send(buffer)
             })
