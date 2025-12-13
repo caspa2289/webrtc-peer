@@ -22,10 +22,10 @@ const init = async () => {
 
             sensor.addEventListener('reading', () => {
                 const buffer = new ArrayBuffer(
-                    16 * Float64Array.BYTES_PER_ELEMENT
+                    16 * Float32Array.BYTES_PER_ELEMENT
                 )
 
-                const array = new Float64Array(buffer)
+                const array = new Float32Array(buffer)
                 sensor.populateMatrix(array)
 
                 dataChannel.send(buffer)
