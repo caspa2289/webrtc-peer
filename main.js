@@ -17,7 +17,7 @@ const init = async () => {
 
             const sensor = new RelativeOrientationSensor({
                 frequency: 60,
-                referenceFrame: 'device',
+                referenceFrame: 'screen',
             })
 
             sensor.addEventListener('reading', () => {
