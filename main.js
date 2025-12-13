@@ -27,8 +27,8 @@ const init = async () => {
 
                 const array = new Float32Array(buffer)
 
-                array[0] = sensor.quaternion[0]
-                array[1] = sensor.quaternion[1]
+                array[0] = sensor.quaternion[1]
+                array[1] = sensor.quaternion[0]
                 array[2] = sensor.quaternion[2]
                 array[3] = sensor.quaternion[3]
 
